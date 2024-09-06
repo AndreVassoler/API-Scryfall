@@ -13,7 +13,7 @@ export class ScryfallController {
 
     @Get('commanders') // Rota para buscar todos os comandantes
     getAllCommanders(): Observable<any> {
-        return this.scryfallService.findAllCommanders();
+        return this.scryfallService.findAllcommanders();
     }
 
     @Get('commander-deck')  // Rota para buscar o comandante e o deck

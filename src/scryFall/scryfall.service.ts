@@ -9,7 +9,6 @@ import { HttpService } from '@nestjs/axios';
 
 @Injectable()
 export class ScryfallService {
-  [x: string]: any;
   constructor(
     private readonly httpService: HttpService,
     @InjectModel(Commander.name) private commanderModel: Model<Commander>,
