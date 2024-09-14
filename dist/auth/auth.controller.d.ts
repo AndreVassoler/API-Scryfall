@@ -5,5 +5,6 @@ export declare class AuthController {
     signIn(signInDto: Record<string, any>): Promise<{
         access_token: string;
     }>;
+    register(registerDto: Record<string, any>): void;
     getProfile(req: any): any;
 }

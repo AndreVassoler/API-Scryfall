@@ -23,6 +23,9 @@ let AuthController = class AuthController {
     signIn(signInDto) {
         return this.authService.signIn(signInDto.username, signInDto.password);
     }
+    register(registerDto) {
+        return this.authService.signUp(registerDto.username, registerDto.password);
+    }
     getProfile(req) {
         return req.user;
     }
@@ -36,6 +39,14 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "signIn", null);
+__decorate([
+    (0, common_1.HttpCode)(common_1.HttpStatus.CREATED),
+    (0, common_1.Post)('register'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "register", null);
 __decorate([
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, common_1.Get)('profile'),

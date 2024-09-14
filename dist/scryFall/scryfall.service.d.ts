@@ -1,13 +1,13 @@
 import { Model } from 'mongoose';
 import { Commander, Card } from './commander.schema';
-import { Observable } from 'rxjs';
-import { HttpService } from '@nestjs/axios';
 export declare class ScryfallService {
-    private readonly httpService;
     private commanderModel;
     private cardModel;
-    constructor(httpService: HttpService, commanderModel: Model<Commander>, cardModel: Model<Card>);
-    findCardByName(name: string): Observable<any>;
-    findAllcommanders(): Observable<any>;
-    findCommanderAndDeck(name: string): Observable<any>;
+    private decks;
+    constructor(commanderModel: Model<Commander>, cardModel: Model<Card>);
+    createDeck(userId: number, deck: any): any;
+    findAllDecks(): any[];
+    findDecksByUser(userId: number): any[];
+    validateCommanderRules(deck: any): boolean;
+    saveDeck(deck: any): any;
 }

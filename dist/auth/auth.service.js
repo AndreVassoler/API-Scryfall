@@ -14,6 +14,9 @@ const common_1 = require("@nestjs/common");
 const users_service_1 = require("../users/users.service");
 const jwt_1 = require("@nestjs/jwt");
 let AuthService = class AuthService {
+    signUp(username, password) {
+        throw new Error('Method not implemented.');
+    }
     constructor(usersService, jwtService) {
         this.usersService = usersService;
         this.jwtService = jwtService;
@@ -26,6 +29,12 @@ let AuthService = class AuthService {
         const payload = { sub: user.userId, username: user.username };
         return {
             access_token: await this.jwtService.signAsync(payload),
+        };
+    }
+    async login(user) {
+        const payload = { username: user.username, sub: user.userId };
+        return {
+            access_token: this.jwtService.sign(payload),
         };
     }
 };

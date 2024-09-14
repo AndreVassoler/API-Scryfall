@@ -17,59 +17,41 @@ const common_1 = require("@nestjs/common");
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 const commander_schema_1 = require("./commander.schema");
-const rxjs_1 = require("rxjs");
-const operators_1 = require("rxjs/operators");
-const axios_1 = require("@nestjs/axios");
 let ScryfallService = class ScryfallService {
-    constructor(httpService, commanderModel, cardModel) {
-        this.httpService = httpService;
+    constructor(commanderModel, cardModel) {
         this.commanderModel = commanderModel;
         this.cardModel = cardModel;
+        this.decks = [];
     }
-    findCardByName(name) {
-        const url = `https://api.scryfall.com/cards/named?fuzzy=${name}`;
-        return this.httpService.get(url).pipe((0, operators_1.map)((response) => response.data));
+    createDeck(userId, deck) {
+        const newDeck = { ...deck, userId, id: this.decks.length + 1 };
+        this.decks.push(newDeck);
+        return newDeck;
     }
-    findAllcommanders() {
-        const url = 'https://api.scryfall.com/cards/search?q=is%3Acommander';
-        return this.httpService.get(url).pipe((0, operators_1.map)((response) => response.data));
+    findAllDecks() {
+        return this.decks;
     }
-    findCommanderAndDeck(name) {
-        return this.findCardByName(name).pipe((0, operators_1.switchMap)((commanderData) => {
-            const url = `https://api.scryfall.com/cards/search?q=type:${commanderData.type_line}+not:${commanderData.name}`;
-            return this.httpService.get(url).pipe((0, operators_1.switchMap)((response) => {
-                const deckData = response.data.data.slice(0, 99);
-                const deckCards = deckData.map(card => new this.cardModel({
-                    name: card.name,
-                    type: card.type_line,
-                    manaCost: card.mana_cost,
-                    imageUrl: card.image_uris?.normal,
-                }));
-                const commander = new this.commanderModel({
-                    name: commanderData.name,
-                    type: commanderData.type_line,
-                    manaCost: commanderData.mana_cost,
-                    imageUrl: commanderData.image_uris?.normal,
-                    deck: deckCards,
-                });
-                return (0, rxjs_1.forkJoin)([
-                    this.cardModel.insertMany(deckCards),
-                    commander.save(),
-                ]).pipe((0, operators_1.map)(() => ({
-                    commander,
-                    deck: deckCards,
-                })));
-            }));
-        }));
+    findDecksByUser(userId) {
+        return this.decks.filter(deck => deck.userId === userId);
+    }
+    validateCommanderRules(deck) {
+        if (deck.cards.length < 60) {
+            return false;
+        }
+        return true;
+    }
+    saveDeck(deck) {
+        const newDeck = { ...deck, id: this.decks.length + 1 };
+        this.decks.push(newDeck);
+        return newDeck;
     }
 };
 exports.ScryfallService = ScryfallService;
 exports.ScryfallService = ScryfallService = __decorate([
     (0, common_1.Injectable)(),
-    __param(1, (0, mongoose_1.InjectModel)(commander_schema_1.Commander.name)),
-    __param(2, (0, mongoose_1.InjectModel)(commander_schema_1.Card.name)),
-    __metadata("design:paramtypes", [axios_1.HttpService,
-        mongoose_2.Model,
+    __param(0, (0, mongoose_1.InjectModel)(commander_schema_1.Commander.name)),
+    __param(1, (0, mongoose_1.InjectModel)(commander_schema_1.Card.name)),
+    __metadata("design:paramtypes", [mongoose_2.Model,
         mongoose_2.Model])
 ], ScryfallService);
 //# sourceMappingURL=scryfall.service.js.map

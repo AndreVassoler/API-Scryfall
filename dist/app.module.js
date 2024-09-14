@@ -8,23 +8,25 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
-const app_controller_1 = require("./app.controller");
-const app_service_1 = require("./app.service");
+const scryfall_controller_1 = require("./scryFall/scryfall.controller");
+const scryfall_service_1 = require("./scryFall/scryfall.service");
 const mongoose_1 = require("@nestjs/mongoose");
+const commander_schema_1 = require("./scryFall/commander.schema");
 const auth_module_1 = require("./auth/auth.module");
-const users_module_1 = require("./users/users.module");
+const cache_manager_1 = require("@nestjs/cache-manager");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            mongoose_1.MongooseModule.forRoot('mongodb://127.0.0.1:27017/nest'),
+            mongoose_1.MongooseModule.forRoot('mongodb+srv://andre:andre123@scryfall-cards.jwhau.mongodb.net/'),
+            mongoose_1.MongooseModule.forFeature([{ name: 'Commander', schema: commander_schema_1.CommanderSchema }, { name: 'Card', schema: commander_schema_1.CardSchema }]),
+            cache_manager_1.CacheModule.register(),
             auth_module_1.AuthModule,
-            users_module_1.UsersModule,
         ],
-        controllers: [app_controller_1.AppController],
-        providers: [app_service_1.AppService],
+        controllers: [scryfall_controller_1.ScryfallController],
+        providers: [scryfall_service_1.ScryfallService],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map
