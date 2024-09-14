@@ -1,34 +1,30 @@
-import { Injectable, Module } from '@nestjs/common';
-
-
+import { Injectable } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
-  private users: any[]; // Add a private property 'users' with type 'any[]'
+  private users = [];
 
-  constructor() {
-    this.users = [
-      {
-        userId: 1,
-        username: 'john',
-        password: 'changeme',
-      },
-      {
-        userId: 2,
-        username: 'maria',
-        password: 'guess',
-      },
-    ];
+  async findOne(username: string): Promise<any> {
+    return this.users.find(user => user.username === username);
   }
 
-  async findOne(username: string) { // Add type annotation for the 'username' parameter
-    return this.users.find((user: any) => user.username === username); // Add type annotation for the 'user' parameter
+  async create(user: any): Promise<any> {
+
+    const existingUser = await this.findOne(user.username);
+    if (existingUser) {
+      throw new Error('Usuário já existe');
+    }
+
+
+    const hashedPassword = await bcrypt.hash(user.password, 10);
+
+    const newUser = {
+      userId: this.users.length + 1,
+      username: user.username,
+      password: hashedPassword, 
+    };
+    this.users.push(newUser);
+    return newUser;
   }
 }
-
-@Module({
-    providers: [UsersService],
-    exports: [UsersService],
-  })
-  export class UsersModule {}
-  

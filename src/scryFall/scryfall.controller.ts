@@ -11,7 +11,7 @@ import {
   export class ScryfallController {
     constructor(private readonly scryfallService: ScryfallService) {}
   
-    // Cria um novo baralho para o jogador logado
+
     @UseGuards(JwtAuthGuard)
     @Post('create')
     createDeck(@Request() req, @Body() deck: any) {
@@ -19,14 +19,14 @@ import {
     }
   
   
-    // Lista os baralhos do jogador logado
+
     @UseGuards(JwtAuthGuard)
     @Get()
     findUserDecks(@Request() req) {
       return this.scryfallService.findDecksByUser(req.user.id);
     }
   
-    // Lista os baralhos do jogador logado com cache
+
     @UseGuards(JwtAuthGuard)
     @UseInterceptors(CacheInterceptor)
     @Get('cached')
@@ -34,7 +34,7 @@ import {
       return this.scryfallService.findDecksByUser(req.user.id);
     }
   
-    // Importa um baralho via JSON e valida as regras de Commander
+
     @UseGuards(JwtAuthGuard)
     @Post('import')
     importDeck(@Body() deck: any) {
