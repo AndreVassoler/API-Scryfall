@@ -1,18 +1,19 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { ScryfallController } from './scryFall/scryfall.controller';
+import { ScryfallService } from './scryFall/scryfall.service';
 import { MongooseModule } from '@nestjs/mongoose';
+import { CommanderSchema, CardSchema } from './scryFall/commander.schema';
 import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
+import { CacheModule } from '@nestjs/cache-manager'; 
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://127.0.0.1:27017/nest'),
-
+    MongooseModule.forRoot('mongodb+srv://andre:andre123@scryfall-cards.jwhau.mongodb.net/'),
+    MongooseModule.forFeature([{ name: 'Commander', schema: CommanderSchema }, { name: 'Card', schema: CardSchema }]),
+    CacheModule.register(),
     AuthModule,
-    UsersModule, 
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [ScryfallController],
+  providers: [ScryfallService],
 })
 export class AppModule {}
