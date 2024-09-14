@@ -14,49 +14,31 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
 const common_1 = require("@nestjs/common");
-const auth_guard_1 = require("./auth.guard");
-const auth_service_1 = require("./auth.service");
+const users_service_1 = require("../users/users.service");
+const create_user_dto_1 = require("./create-user.dto");
 let AuthController = class AuthController {
-    constructor(authService) {
-        this.authService = authService;
+    constructor(usersService) {
+        this.usersService = usersService;
     }
-    signIn(signInDto) {
-        return this.authService.signIn(signInDto.username, signInDto.password);
-    }
-    register(registerDto) {
-        return this.authService.signUp(registerDto.username, registerDto.password);
-    }
-    getProfile(req) {
-        return req.user;
+    async register(createUserDto) {
+        try {
+            return await this.usersService.create(createUserDto);
+        }
+        catch (error) {
+            throw new common_1.BadRequestException('Usuário já existe ou dados inválidos');
+        }
     }
 };
 exports.AuthController = AuthController;
 __decorate([
-    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
-    (0, common_1.Post)('login'),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
-], AuthController.prototype, "signIn", null);
-__decorate([
-    (0, common_1.HttpCode)(common_1.HttpStatus.CREATED),
     (0, common_1.Post)('register'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:paramtypes", [create_user_dto_1.CreateUserDto]),
+    __metadata("design:returntype", Promise)
 ], AuthController.prototype, "register", null);
-__decorate([
-    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
-    (0, common_1.Get)('profile'),
-    __param(0, (0, common_1.Request)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
-], AuthController.prototype, "getProfile", null);
 exports.AuthController = AuthController = __decorate([
     (0, common_1.Controller)('auth'),
-    __metadata("design:paramtypes", [auth_service_1.AuthService])
+    __metadata("design:paramtypes", [users_service_1.UsersService])
 ], AuthController);
 //# sourceMappingURL=auth.controller.js.map
