@@ -1,8 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
+import { CreateUserDto } from 'src/auth/create-user.dto';
 
 @Injectable()
 export class UsersService {
+  login(createUserDto: CreateUserDto) {
+    throw new Error('Method not implemented.');
+  }
   private users = [];
 
   async findOne(username: string): Promise<any> {

@@ -20,7 +20,7 @@ exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            mongoose_1.MongooseModule.forRoot('mongodb+srv://andre:andre123@scryfall-cards.jwhau.mongodb.net/'),
+            mongoose_1.MongooseModule.forRoot('mongodb://localhost:27017/scryfall-cards'),
             mongoose_1.MongooseModule.forFeature([{ name: 'Commander', schema: commander_schema_1.CommanderSchema }, { name: 'Card', schema: commander_schema_1.CardSchema }]),
             cache_manager_1.CacheModule.register(),
             auth_module_1.AuthModule,

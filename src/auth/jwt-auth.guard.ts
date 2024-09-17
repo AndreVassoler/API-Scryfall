@@ -14,7 +14,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {}
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
-      secret: 'yourSecretKey', // Substitua por sua chave secreta
+      secret: 'CHAVE_SECRETA', // Substitua por sua chave secreta
       signOptions: { expiresIn: '60s' }, // Token expira em 60 segundos
     }),
   ],

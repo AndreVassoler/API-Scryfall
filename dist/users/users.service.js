@@ -13,6 +13,9 @@ let UsersService = class UsersService {
     constructor() {
         this.users = [];
     }
+    login(createUserDto) {
+        throw new Error('Method not implemented.');
+    }
     async findOne(username) {
         return this.users.find(user => user.username === username);
     }
